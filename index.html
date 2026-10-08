@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Creamos software a medida para que las buenas ideas se conviertan en productos digitales.">
+  <title>nexo — Desarrollo de software</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17231f;
+      --muted: #65716b;
+      --paper: #f7f8f4;
+      --green: #b8f36b;
+      --dark: #15251f;
+      --line: #e2e7df;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      width: min(1160px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--green);
+      font-size: 17px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      color: #48544e;
+      font-size: 14px;
+    }
+
+    .nav a:hover, .text-link:hover { color: #568a22; }
+
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      border: 1px solid var(--dark);
+      border-radius: 7px;
+      background: var(--dark);
+      color: white;
+      font-size: 14px;
+      font-weight: 650;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .button:hover { transform: translateY(-2px); background: #294238; }
+    .button-light { border-color: var(--line); background: white; color: var(--ink); }
+    .button-light:hover { background: #f0f4ec; }
+
+    .hero {
+      display: grid;
+      min-height: 600px;
+      grid-template-columns: 1.08fr 0.92fr;
+      align-items: center;
+      gap: 52px;
+      padding: 76px 0 84px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: #58675e;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.25px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8bcf43;
+      content: "";
+    }
+
+    h1 {
+      max-width: 640px;
+      margin: 22px 0;
+      font-size: clamp(46px, 6vw, 76px);
+      line-height: 0.99;
+      letter-spacing: -5px;
+    }
+
+    h1 span { color: #6b9d37; }
+
+    .hero-copy {
+      max-width: 480px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 31px; }
+
+    .proof {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 38px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .avatars { display: flex; padding-left: 3px; }
+    .avatar {
+      display: grid;
+      width: 29px;
+      height: 29px;
+      margin-left: -4px;
+      place-items: center;
+      border: 2px solid var(--paper);
+      border-radius: 50%;
+      background: #d8e6c7;
+      color: #344b30;
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .avatar:nth-child(2) { background: #f2d7be; color: #775337; }
+    .avatar:nth-child(3) { background: #d8d8ef; color: #4a4a77; }
+    .proof strong { display: block; margin-bottom: 2px; color: var(--ink); font-size: 12px; }
+
+    .visual {
+      position: relative;
+      display: flex;
+      min-height: 420px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse at 50% 100%, rgba(184, 243, 107, .22), transparent 54%),
+        #e9eee5;
+    }
+
+    .visual::before, .visual::after {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border: 1px solid rgba(76, 107, 75, .12);
+      border-radius: 50%;
+      content: "";
+    }
+    .visual::after { width: 270px; height: 270px; }
+
+    .code-window {
+      z-index: 1;
+      width: min(390px, 82%);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      background: #182720;
+      box-shadow: 0 28px 65px rgba(25, 44, 34, .23);
+      transform: rotate(-3deg);
+    }
+
+    .window-bar {
+      display: flex;
+      height: 42px;
+      align-items: center;
+      gap: 6px;
+      padding: 0 15px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: #9ba99f;
+      font: 11px ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #fb8276; }
+    .dot:nth-child(2) { background: #f2c66d; }
+    .dot:nth-child(3) { margin-right: 8px; background: #8bcf7d; }
+
+    .code {
+      padding: 27px 24px 30px;
+      color: #cad7ce;
+      font: 12px/2.05 ui-monospace, SFMono-Regular, Consolas, monospace;
+      white-space: nowrap;
+    }
+    .code .purple { color: #c6a5fa; }
+    .code .green { color: #b8f36b; }
+    .code .orange { color: #f4b985; }
+    .code .comment { color: #81948a; }
+    .code .indent { padding-left: 19px; }
+
+    .floating-note {
+      position: absolute;
+      right: 13px;
+      bottom: 35px;
+      z-index: 2;
+      padding: 13px 16px;
+      border: 1px solid #e7ebe3;
+      border-radius: 9px;
+      background: white;
+      box-shadow: 0 8px 24px rgba(30, 48, 35, .09);
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .floating-note strong { display: block; margin-bottom: 4px; color: var(--ink); font-size: 13px; }
+    .status { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: #75c748; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding: 29px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .metric { display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .metric strong { font-size: 26px; letter-spacing: -1px; }
+    .metric span { max-width: 105px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+
+    .services { padding: 105px 0 112px; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+    h2 { margin: 12px 0 0; font-size: clamp(32px, 4vw, 46px); letter-spacing: -2.3px; }
+    .section-heading p { max-width: 360px; margin: 0 0 5px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      min-height: 225px;
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255,255,255,.58);
+    }
+    .card-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 10px;
+      background: #edf5e4;
+      color: #50772d;
+      font-size: 19px;
+    }
+    .card h3 { margin: 24px 0 9px; font-size: 17px; letter-spacing: -.4px; }
+    .card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+
+    .technology-section { padding: 0 0 105px; }
+    .technology-groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .technology-group {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: rgba(255,255,255,.58);
+    }
+    .technology-group h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: -.3px; }
+    .technology-group p { min-height: 42px; margin: 0 0 19px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+    .technology-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .technology-list span {
+      padding: 7px 10px;
+      border: 1px solid #e5e9e1;
+      border-radius: 6px;
+      background: white;
+      color: #46544a;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .contact {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 30px;
+      padding: 43px 48px;
+      border-radius: 14px;
+      background: var(--dark);
+      color: white;
+    }
+    .contact h2 { max-width: 560px; font-size: clamp(29px, 4vw, 40px); }
+    .contact p { margin: 12px 0 0; color: #b4c2b8; font-size: 14px; }
+    .contact .button { flex-shrink: 0; border-color: var(--green); background: var(--green); color: var(--dark); }
+    .contact .button:hover { background: #c9fa8c; }
+
+    footer {
+      display: flex;
+      min-height: 78px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    footer .brand { color: var(--ink); font-size: 16px; }
+    footer .brand-mark { width: 24px; height: 24px; border-radius: 7px; font-size: 14px; }
+
+    @media (max-width: 800px) {
+      .hero { min-height: auto; grid-template-columns: 1fr; gap: 42px; padding: 72px 0; }
+      .visual { min-height: 370px; }
+      .hero-copy { max-width: 560px; }
+      .cards { grid-template-columns: 1fr; }
+      .technology-groups { grid-template-columns: 1fr; }
+      .card { min-height: auto; }
+      .card h3 { margin-top: 18px; }
+      .section-heading { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 36px, 1160px); }
+      .topbar { height: 70px; }
+      .nav { gap: 0; }
+      .nav > a:not(.button) { display: none; }
+      .nav .button { min-height: 40px; padding: 0 13px; font-size: 12px; }
+      h1 { letter-spacing: -3px; }
+      .hero { padding: 59px 0; }
+      .hero-copy { font-size: 15px; }
+      .visual { min-height: 315px; }
+      .code { padding: 20px 16px 23px; font-size: 10px; }
+      .floating-note { right: 9px; bottom: 19px; }
+      .metrics { grid-template-columns: 1fr; gap: 18px; padding: 24px 0; }
+      .metric { justify-content: start; }
+      .metric span { max-width: none; }
+      .services { padding: 76px 0; }
+      .technology-section { padding-bottom: 76px; }
+      .contact { align-items: start; flex-direction: column; padding: 31px 25px; }
+      footer { align-items: start; flex-direction: column; justify-content: center; padding: 20px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell topbar">
+    <a class="brand" href="#" aria-label="nexo, inicio">
+      <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+      nexo
+    </a>
+    <nav class="nav" aria-label="Navegación principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#tecnologias">Tecnologías</a>
+      <a href="#nosotros">Nosotros</a>
+      <a class="button" href="#contacto">Hablemos <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="shell hero" id="nosotros">
+      <div>
+        <span class="eyebrow">Estudio de desarrollo digital</span>
+        <h1>Ideas brillantes.<br>Software <span>que funciona.</span></h1>
+        <p class="hero-copy">Diseñamos y construimos productos digitales que resuelven problemas reales. Tecnología bien pensada, hecha para crecer contigo.</p>
+        <div class="hero-actions">
+          <a class="button" href="#contacto">Cuéntanos tu idea <span aria-hidden="true">↗</span></a>
+          <a class="button button-light" href="#servicios">Descubre qué hacemos</a>
+        </div>
+        <div class="proof">
+          <div class="avatars" aria-hidden="true">
+            <span class="avatar">AM</span><span class="avatar">JL</span><span class="avatar">CR</span>
+          </div>
+          <div><strong>Un equipo, de principio a fin</strong>Producto · Diseño · Ingeniería</div>
+        </div>
+      </div>
+
+      <div class="visual" aria-label="Ilustración de código en desarrollo">
+        <div class="code-window">
+          <div class="window-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span> producto.ts</div>
+          <div class="code">
+            <div><span class="purple">const</span> idea = <span class="orange">"la tuya"</span>;</div>
+            <div><span class="purple">async function</span> <span class="green">hacerlaReal</span>() {</div>
+            <div class="indent comment">// Buen diseño, código sólido</div>
+            <div class="indent"><span class="purple">const</span> equipo = <span class="green">nexo</span>;</div>
+            <div class="indent"><span class="purple">return</span> equipo.construir(idea);</div>
+            <div>}</div>
+            <div class="comment">// Hecho para crecer contigo ✨</div>
+          </div>
+        </div>
+        <div class="floating-note">
+          <strong><span class="status"></span>Construido para escalar</strong>
+          Listo para lo que sigue
+        </div>
+      </div>
+    </section>
+
+    <section class="shell metrics" aria-label="Nexo en números">
+      <div class="metric"><strong>12+</strong><span>años creando tecnología</span></div>
+      <div class="metric"><strong>48</strong><span>productos lanzados</span></div>
+      <div class="metric"><strong>96%</strong><span>de clientes nos recomiendan</span></div>
+    </section>
+
+    <section class="shell services" id="servicios">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Lo que hacemos</span>
+          <h2>Del primer boceto<br>al siguiente gran paso.</h2>
+        </div>
+        <p>Nos integramos a tu equipo para convertir desafíos complejos en experiencias digitales simples y útiles.</p>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">✳</div>
+          <h3>Software a medida</h3>
+          <p>Plataformas y aplicaciones diseñadas alrededor de tus procesos, tus usuarios y tus objetivos.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">⌘</div>
+          <h3>Productos digitales</h3>
+          <p>Validamos, diseñamos y lanzamos productos que la gente disfruta usando y las empresas pueden escalar.</p>
+        </article>
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">↗</div>
+          <h3>Equipos de ingeniería</h3>
+          <p>Talento senior y colaboración transparente para acelerar tu roadmap sin comprometer la calidad.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell technology-section" id="tecnologias">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">Nuestro stack</span>
+          <h2>Las herramientas adecuadas<br>para cada desafío.</h2>
+        </div>
+        <p>Elegimos tecnologías probadas y actuales según las necesidades de cada producto, priorizando rendimiento, seguridad y facilidad de evolución.</p>
+      </div>
+      <div class="technology-groups">
+        <article class="technology-group">
+          <h3>Frontend</h3>
+          <p>Interfaces rápidas, accesibles y adaptables a cualquier pantalla.</p>
+          <div class="technology-list" aria-label="Tecnologías frontend">
+            <span>React</span><span>Next.js</span><span>TypeScript</span><span>HTML y CSS</span>
+          </div>
+        </article>
+        <article class="technology-group">
+          <h3>Backend y datos</h3>
+          <p>Servicios y APIs confiables para impulsar las funcionalidades de tu producto.</p>
+          <div class="technology-list" aria-label="Tecnologías backend y datos">
+            <span>Node.js</span><span>Python</span><span>PostgreSQL</span><span>Redis</span>
+          </div>
+        </article>
+        <article class="technology-group">
+          <h3>Nube y entrega</h3>
+          <p>Infraestructura escalable y procesos que permiten entregar con confianza.</p>
+          <div class="technology-list" aria-label="Tecnologías de nube y entrega">
+            <span>AWS</span><span>Docker</span><span>GitHub Actions</span><span>Linux</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell contact" id="contacto">
+      <div>
+        <span class="eyebrow">Tu próximo proyecto empieza aquí</span>
+        <h2>¿Y si construimos algo increíble?</h2>
+        <p>Cuéntanos qué tienes en mente. La primera conversación corre por nuestra cuenta.</p>
+      </div>
+      <a class="button" href="mailto:hola@nexo.dev">Escríbenos <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+
+  <footer class="shell">
+    <a class="brand" href="#" aria-label="nexo, inicio"><span class="brand-mark" aria-hidden="true">&lt;/&gt;</span> nexo</a>
+    <span>© 2026 nexo. Software con intención.</span>
+  </footer>
+</body>
+</html>
